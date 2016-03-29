@@ -1,0 +1,59 @@
+secrets: secrets.yml
+templates:
+  pyload:
+    pyload:
+      api: '{{secrets.pyload.url}}'
+      username: '{{secrets.pyload.username}}'
+      password: '{{secrets.pyload.password}}'
+      enabled: yes
+  pyload_single:
+    pyload:
+      package: '{{link}}'
+      folder: '{{title}}'
+      queue: yes
+      parse_url: yes
+      multiple_hoster: no
+    template:
+      - pyload
+  pyload_multi:
+    pyload:
+      queue: yes
+      package: '{{link}}'
+      folder: '{{title}}'
+      parse_url: yes
+      multiple_hoster: yes
+    template:
+      - pyload
+  pyload_opt_dontstart:
+    pyload:  
+      queue: no
+  pyload_opt_limithosters:
+    pyload:  
+      hoster: 
+        - UploadedTo
+        - NitroflareCom
+  rss_pocket:
+    rss: 
+      url: '{{secrets.pocket.url}}'
+      username: '{{secrets.pocket.username}}'
+      password: '{{secrets.pocket.password}}'
+      other_fields: [link]
+tasks:
+  pocket_download_multi:
+    regexp:
+      accept:
+        - rlslog
+      from: link
+    template:
+      - rss_pocket
+      - pyload_opt_dontstart
+      - pyload_multi
+  pocket_download_single:
+    regexp:
+      accept:
+        - avxhome.se
+      from: link
+    template:
+      - rss_pocket
+      - pyload_opt_limithosters
+      - pyload_single

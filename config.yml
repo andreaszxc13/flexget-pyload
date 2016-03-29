@@ -32,12 +32,21 @@ templates:
       hoster: 
         - UploadedTo
         - NitroflareCom
-  rss_pocket:
-    rss: 
-      url: '{{secrets.pocket.url}}'
-      username: '{{secrets.pocket.username}}'
-      password: '{{secrets.pocket.password}}'
-      other_fields: [link]
+  rss_aggregate:
+    inputs:
+    #rss_pocket:
+      - rss: 
+          url: '{{secrets.pocket.url}}'
+          username: '{{secrets.pocket.username}}'
+          password: '{{secrets.pocket.password}}'
+          other_fields: [link]
+    #rss_inoreader:
+      - rss:
+          url: '{{secrets.inoreader.url}}'
+          username: '{{secrets.inoreader.username}}'
+          password: '{{secrets.inoreader.password}}'
+          other_fields: [link]
+
 tasks:
   pocket_download_multi:
     regexp:
@@ -45,7 +54,7 @@ tasks:
         - rlslog
       from: link
     template:
-      - rss_pocket
+      - rss_aggregate
       - pyload_opt_dontstart
       - pyload_multi
   pocket_download_single:
@@ -54,6 +63,6 @@ tasks:
         - avxhome.se
       from: link
     template:
-      - rss_pocket
+      - rss_aggregate
       - pyload_opt_limithosters
       - pyload_single

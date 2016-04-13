@@ -47,6 +47,11 @@ templates:
           password: '{{secrets.inoreader.password}}'
           other_fields: [link]
 
+      - rss:
+          url: '{{secrets.inoreader2.url}}'
+          username: '{{secrets.inoreader2.username}}'
+          password: '{{secrets.inoreader2.password}}'
+          other_fields: [link]
 tasks:
   pocket_download_multi:
     regexp:
@@ -61,6 +66,7 @@ tasks:
     regexp:
       accept:
         - avxhome.se
+        - /avaxhome/
       from: link
     template:
       - rss_aggregate
